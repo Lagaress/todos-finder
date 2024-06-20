@@ -1,26 +1,40 @@
-// The module 'vscode' contains the VS Code extensibility API
-// Import the module and reference it with the alias vscode in your code below
 import * as vscode from 'vscode';
 
-// This method is called when your extension is activated
-// Your extension is activated the very first time the command is executed
 export function activate(context: vscode.ExtensionContext) {
+    console.log('Congratulations, your extension "todoFinder" is now active!');
 
-	// Use the console to output diagnostic information (console.log) and errors (console.error)
-	// This line of code will only be executed once when your extension is activated
-	console.log('Congratulations, your extension "todosfinder" is now active!');
+    let statusBarItem = vscode.window.createStatusBarItem(vscode.StatusBarAlignment.Right, 100);
+    statusBarItem.text = 'TODOs: 0';
+    statusBarItem.show();
+    context.subscriptions.push(statusBarItem);
 
-	// The command has been defined in the package.json file
-	// Now provide the implementation of the command with registerCommand
-	// The commandId parameter must match the command field in package.json
-	const disposable = vscode.commands.registerCommand('todosfinder.helloWorld', () => {
-		// The code you place here will be executed every time your command is executed
-		// Display a message box to the user
-		vscode.window.showInformationMessage('Hello World from todosFinder!');
-	});
+    const updateTodoCount = () => {
+        const editor = vscode.window.activeTextEditor;
+        if (editor) {
+            const document = editor.document;
+            const text = document.getText();
+            const todoCount = (text.match(/TODO/g) || []).length;
+            statusBarItem.text = `TODOs: ${todoCount}`;
+        } else {
+            statusBarItem.text = 'TODOs: 0';
+        }
+    };
 
-	context.subscriptions.push(disposable);
+    // Actualizar el contador al abrir un documento
+    vscode.window.onDidChangeActiveTextEditor(updateTodoCount, null, context.subscriptions);
+
+    // Actualizar el contador al guardar un documento
+    vscode.workspace.onDidSaveTextDocument(updateTodoCount, null, context.subscriptions);
+
+    // Actualizar el contador al cambiar el contenido de un documento
+    vscode.workspace.onDidChangeTextDocument(event => {
+        if (vscode.window.activeTextEditor && event.document === vscode.window.activeTextEditor.document) {
+            updateTodoCount();
+        }
+    });
+
+    // Inicializar el contador cuando se activa la extensión
+    updateTodoCount();
 }
 
-// This method is called when your extension is deactivated
 export function deactivate() {}
