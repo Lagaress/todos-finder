@@ -15,12 +15,44 @@
   ],
   "main": "./out/extension.js",
   "contributes": {
+    "viewsContainers": {
+      "activitybar": [
+        {
+          "id": "todoView",
+          "title": "TODOs",
+          "icon": "resources/icon.png"
+        }
+      ]
+    },
+    "views": {
+      "todoView": [
+        {
+          "id": "todoTreeView",
+          "name": "TODOs",
+          "contextualTitle": "TODO Files"
+        }
+      ]
+    },
     "commands": [
       {
         "command": "todosfinder.helloWorld",
         "title": "Hello World"
+      },
+      {
+        "command": "todoView.refresh",
+        "title": "Refresh TODOs",
+        "icon": "resources/icon.png"
       }
-    ]
+    ],
+    "menus": {
+      "view/title": [
+        {
+          "command": "todoView.refresh",
+          "when": "view == todoTreeView",
+          "group": "navigation"
+        }
+      ]
+    }
   },
   "scripts": {
     "vscode:prepublish": "npm run compile",

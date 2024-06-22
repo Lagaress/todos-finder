@@ -28,18 +28,60 @@ export function activate(context: vscode.ExtensionContext) {
 
         let totalTodos = 0;
         const uris = await vscode.workspace.findFiles('**/*.{ts,js}', '**/node_modules/**');
-        
+        const todoFiles: vscode.Uri[] = [];
+
         for (const uri of uris) {
-            totalTodos += await countTodosInFile(uri);
+            const todoCount = await countTodosInFile(uri);
+            if (todoCount > 0) {
+                todoFiles.push(uri);
+                totalTodos += todoCount;
+            }
         }
 
         statusBarItem.text = `TODOs: ${totalTodos}`;
+        todoProvider.refresh(todoFiles);
     };
+
+    const todoProvider = new TodoProvider();
+    vscode.window.registerTreeDataProvider('todoTreeView', todoProvider);
+
+    vscode.commands.registerCommand('todoView.refresh', updateTodoCount);
 
     vscode.window.onDidChangeActiveTextEditor(updateTodoCount, null, context.subscriptions);
     vscode.workspace.onDidSaveTextDocument(updateTodoCount, null, context.subscriptions);
-
     updateTodoCount();
 }
 
 export function deactivate() {}
+
+class TodoProvider implements vscode.TreeDataProvider<vscode.Uri> {
+    private _onDidChangeTreeData: vscode.EventEmitter<vscode.Uri | undefined | null | void> = new vscode.EventEmitter<vscode.Uri | undefined | null | void>();
+    readonly onDidChangeTreeData: vscode.Event<vscode.Uri | undefined | null | void> = this._onDidChangeTreeData.event;
+
+    private todoFiles: vscode.Uri[] = [];
+
+    refresh(todoFiles: vscode.Uri[]): void {
+        this.todoFiles = todoFiles;
+        this._onDidChangeTreeData.fire();
+    }
+
+    getTreeItem(element: vscode.Uri): vscode.TreeItem {
+        return {
+            resourceUri: element,
+            command: {
+                command: 'vscode.open',
+                arguments: [element],
+                title: 'Open File'
+            },
+            collapsibleState: vscode.TreeItemCollapsibleState.None
+        };
+    }
+
+    getChildren(element?: vscode.Uri): vscode.ProviderResult<vscode.Uri[]> {
+        if (element) {
+            return [];
+        } else {
+            return this.todoFiles;
+        }
+    }
+}
