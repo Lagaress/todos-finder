@@ -1,11 +1,11 @@
 import * as vscode from "vscode";
 import { TodoProvider } from "../providers/TodoProvider";
-import getConfiguredTag from "../utils/getConfiguredTag";
+import getUserConfiguredTag from "../utils/getUserConfiguredTag";
 
 const todoProvider = new TodoProvider();
 
 async function countTodosInFile(uri: vscode.Uri): Promise<number> {
-  const tag = getConfiguredTag();
+  const tag = getUserConfiguredTag();
   const regex = tag
     ? new RegExp(`TODO\\[${tag}\\]`, "g")
     : new RegExp("TODO", "g");
