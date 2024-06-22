@@ -31,7 +31,7 @@
         {
           "id": "todoView",
           "title": "TODOs",
-          "icon": "resources/icon.png"
+          "icon": "resources/todo.svg"
         }
       ]
     },
@@ -52,7 +52,11 @@
       {
         "command": "todoView.refresh",
         "title": "Refresh TODOs",
-        "icon": "resources/icon.png"
+        "icon": "resources/refresh.svg"
+      },
+      {
+        "command": "todosfinder.ignoreTodo",
+        "title": "Ignore TODO"
       }
     ],
     "menus": {
@@ -60,6 +64,13 @@
         {
           "command": "todoView.refresh",
           "when": "view == todoTreeView",
+          "group": "navigation"
+        }
+      ],
+      "editor/context": [
+        {
+          "command": "todosfinder.ignoreTodo",
+          "when": "editorTextFocus && !editorReadonly",
           "group": "navigation"
         }
       ]

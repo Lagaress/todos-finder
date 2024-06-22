@@ -67,6 +67,21 @@ export function activate(context: vscode.ExtensionContext) {
 
     vscode.commands.registerCommand('todoView.refresh', updateTodoCount);
 
+    // Register the ignore TODO command
+    vscode.commands.registerCommand('todosfinder.ignoreTodo', () => {
+        const editor = vscode.window.activeTextEditor;
+        if (editor) {
+            const position = editor.selection.active;
+            const line = editor.document.lineAt(position.line);
+
+            editor.edit(editBuilder => {
+                editBuilder.insert(new vscode.Position(line.lineNumber, 0), '//ignore-todo\n');
+            }).then(() => {
+                updateTodoCount();
+            });
+        }
+    });
+
     vscode.window.onDidChangeActiveTextEditor(updateTodoCount, null, context.subscriptions);
     vscode.workspace.onDidSaveTextDocument(updateTodoCount, null, context.subscriptions);
     updateTodoCount();
