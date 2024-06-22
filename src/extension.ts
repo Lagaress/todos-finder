@@ -16,12 +16,24 @@ export function activate(context: vscode.ExtensionContext) {
     const countTodosInFile = async (uri: vscode.Uri): Promise<number> => {
         const tag = getConfiguredTag();
         const regex = tag ? new RegExp(`TODO\\[${tag}\\]`, 'g') : new RegExp('TODO', 'g');
+        const ignoreRegex = /^\/\/ignore-todo$/;
 
         try {
             const document = await vscode.workspace.openTextDocument(uri);
             const text = document.getText();
-            const matches = text.match(regex);
-            return matches ? matches.length : 0;
+            const lines = text.split('\n');
+            let todoCount = 0;
+
+            for (let i = 0; i < lines.length; i++) {
+                if (regex.test(lines[i])) {
+                    const previousLine = lines[i - 1] || '';
+                    if (!ignoreRegex.test(previousLine)) {
+                        todoCount++;
+                    }
+                }
+            }
+
+            return todoCount;
         } catch (error) {
             console.error(`Failed to read file ${uri.fsPath}:`, error);
             return 0;
