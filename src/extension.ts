@@ -8,11 +8,19 @@ export function activate(context: vscode.ExtensionContext) {
     statusBarItem.show();
     context.subscriptions.push(statusBarItem);
 
+    const getConfiguredTag = (): string => {
+        const config = vscode.workspace.getConfiguration('todosfinder');
+        return config.get<string>('tag', '');
+    };
+
     const countTodosInFile = async (uri: vscode.Uri): Promise<number> => {
+        const tag = getConfiguredTag();
+        const regex = tag ? new RegExp(`TODO\\[${tag}\\]`, 'g') : new RegExp('TODO', 'g');
+
         try {
             const document = await vscode.workspace.openTextDocument(uri);
             const text = document.getText();
-            const matches = text.match(/TODO/g);
+            const matches = text.match(regex);
             return matches ? matches.length : 0;
         } catch (error) {
             console.error(`Failed to read file ${uri.fsPath}:`, error);
@@ -54,9 +62,9 @@ export function activate(context: vscode.ExtensionContext) {
 
 export function deactivate() {}
 
-class TodoProvider implements vscode.TreeDataProvider<vscode.Uri> {
-    private _onDidChangeTreeData: vscode.EventEmitter<vscode.Uri | undefined | null | void> = new vscode.EventEmitter<vscode.Uri | undefined | null | void>();
-    readonly onDidChangeTreeData: vscode.Event<vscode.Uri | undefined | null | void> = this._onDidChangeTreeData.event;
+class TodoProvider implements vscode.TreeDataProvider<TodoItem> {
+    private _onDidChangeTreeData: vscode.EventEmitter<TodoItem | undefined | null | void> = new vscode.EventEmitter<TodoItem | undefined | null | void>();
+    readonly onDidChangeTreeData: vscode.Event<TodoItem | undefined | null | void> = this._onDidChangeTreeData.event;
 
     private todoFiles: vscode.Uri[] = [];
 
@@ -65,23 +73,43 @@ class TodoProvider implements vscode.TreeDataProvider<vscode.Uri> {
         this._onDidChangeTreeData.fire();
     }
 
-    getTreeItem(element: vscode.Uri): vscode.TreeItem {
+    getTreeItem(element: TodoItem): vscode.TreeItem {
         return {
-            resourceUri: element,
-            command: {
-                command: 'vscode.open',
-                arguments: [element],
-                title: 'Open File'
-            },
-            collapsibleState: vscode.TreeItemCollapsibleState.None
+            label: element.label,
+            resourceUri: element.resourceUri,
+            command: element.command,
+            collapsibleState: element.collapsibleState,
         };
     }
 
-    getChildren(element?: vscode.Uri): vscode.ProviderResult<vscode.Uri[]> {
+    getChildren(element?: TodoItem): vscode.ProviderResult<TodoItem[]> {
         if (element) {
-            return [];
+            return element.children;
         } else {
-            return this.todoFiles;
+            return [
+                new TodoItem(undefined, "TODOs", vscode.TreeItemCollapsibleState.Collapsed, undefined, this.todoFiles.map(uri => {
+                    return new TodoItem(uri, vscode.workspace.asRelativePath(uri), vscode.TreeItemCollapsibleState.None, {
+                        command: 'vscode.open',
+                        arguments: [uri],
+                        title: 'Open File'
+                    });
+                }))
+            ];
         }
+    }
+}
+
+class TodoItem extends vscode.TreeItem {
+    constructor(
+        public resourceUri: vscode.Uri | undefined,
+        public label: string,
+        public collapsibleState: vscode.TreeItemCollapsibleState,
+        public command?: vscode.Command,
+        public children?: TodoItem[]
+    ) {
+        super(label, collapsibleState);
+        this.resourceUri = resourceUri;
+        this.command = command;
+        this.children = children;
     }
 }

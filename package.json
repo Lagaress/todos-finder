@@ -15,6 +15,17 @@
   ],
   "main": "./out/extension.js",
   "contributes": {
+    "configuration": {
+      "type": "object",
+      "title": "TODO Finder Configuration",
+      "properties": {
+        "todosfinder.tag": {
+          "type": "string",
+          "default": "",
+          "description": "Tag to search for in your code"
+        }
+      }
+    },
     "viewsContainers": {
       "activitybar": [
         {
