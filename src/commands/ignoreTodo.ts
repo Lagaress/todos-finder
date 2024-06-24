@@ -1,6 +1,7 @@
 import * as vscode from "vscode";
 import todoService from "../services/todoService";
 import config from "../config/config";
+import { StatusBarSingleton } from "../types/Singleton/StatusBarSingleton";
 
 async function ignoreTodoCommand() {
   console.log("ignoreTodoCommand: Command execution started.");

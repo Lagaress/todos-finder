@@ -31,7 +31,7 @@
         {
           "id": "todoView",
           "title": "TODOs",
-          "icon": "resources/todo.svg"
+          "icon": "resources/icon.png"
         }
       ]
     },
@@ -52,7 +52,7 @@
       {
         "command": "todoView.refresh",
         "title": "Refresh TODOs",
-        "icon": "resources/refresh.svg"
+        "icon": "resources/icon.png"
       },
       {
         "command": "todosfinder.ignoreTodo",

@@ -1,11 +1,10 @@
 import * as vscode from "vscode";
-import { TodoProvider } from "../providers/TodoProvider";
-import getUserConfiguredTag from "../utils/getUserConfiguredTag";
 import config from "../config/config";
+import { StatusBarSingleton } from "../types/Singleton/StatusBarSingleton";
+import { TodoProviderSingleton } from "../types/Singleton/TodoProviderSingleton";
 import TodoCountData from "../types/TodoCountData";
 import { isNotNull } from "../types/typeGuards";
-
-const todoProvider = new TodoProvider();
+import getUserConfiguredTag from "../utils/getUserConfiguredTag";
 
 const IGNORE_REGEX = /^\/\/ignore-todo$/;
 function createTodoFinderRegex(): RegExp {
@@ -42,15 +41,6 @@ async function countTodosInFileByUri(uri: vscode.Uri): Promise<number> {
   }
 }
 
-function createStatusBarItem(): vscode.StatusBarItem {
-    console.log("createStatusBarItem: Creating status bar item.")
-    const statusBarItem = vscode.window.createStatusBarItem(vscode.StatusBarAlignment.Left, config.STATUS_BAR_ELEMENT_PRIORITY);
-    statusBarItem.text = "TODOs: 0";
-    statusBarItem.show();
-    console.log("createStatusBarItem: Status bar item created successfully.")
-    return statusBarItem;
-}
-
 async function getTodoCountDataByUri(uri: vscode.Uri): Promise<TodoCountData | null> {
   console.log('getTodoCountDataByUri: Getting TODO count data for file')
   const count = await countTodosInFileByUri(uri);
@@ -60,12 +50,12 @@ async function getTodoCountDataByUri(uri: vscode.Uri): Promise<TodoCountData | n
   return null;
 }
 
-export default {
-  countTodosInFileByUri,
 
+export default {
   async updateTodoCount(): Promise<void> {
-    console.log("updateTodoCount: Updating TODO count.")
-    const statusBarItem = createStatusBarItem();
+    console.log("updateTodoCount: Updating TODO count.");
+    const statusBarItem = StatusBarSingleton.getInstance();
+    const todoProvider = TodoProviderSingleton.getInstance();  
 
     if (!vscode.workspace.workspaceFolders && !vscode.window.activeTextEditor) {
       console.log("updateTodoCount: No active workspace or editor found.")
