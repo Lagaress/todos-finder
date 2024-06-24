@@ -1,4 +1,4 @@
-# TODO Finder
+# TODOs Finder
 
 An extension for Visual Studio Code that helps you find and manage TODOs in your codebase. This extension provides a sidebar view and a status bar item to display the number of TODOs, and it allows you to configure custom tags and file patterns for inclusion and exclusion in the search.
 
@@ -14,7 +14,7 @@ An extension for Visual Studio Code that helps you find and manage TODOs in your
 
 1. Open Visual Studio Code.
 2. Go to the Extensions view by clicking the square icon in the sidebar or pressing `Ctrl+Shift+X`.
-3. Search for `TODO Finder`.
+3. Search for `TODOs Finder`.
 4. Click `Install`.
 
 ## Usage
