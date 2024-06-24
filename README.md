@@ -1,71 +1,59 @@
-# todosfinder README
+# TODO Finder
 
-This is the README for your extension "todosfinder". After writing up a brief description, we recommend including the following sections.
+An extension for Visual Studio Code that helps you find and manage TODOs in your codebase. This extension provides a sidebar view and a status bar item to display the number of TODOs, and it allows you to configure custom tags and file patterns for inclusion and exclusion in the search.
 
 ## Features
 
-Describe specific features of your extension including screenshots of your extension in action. Image paths are relative to this README file.
+- Display the total number of TODOs in your project.
+- Sidebar view with a list of files containing TODOs.
+- Configure custom tags for filtering TODOs.
+- Configure file inclusion and exclusion patterns for the search.
+- Ignore specific TODOs with an `//ignore-todo` comment.
 
-For example if there is an image subfolder under your extension project workspace:
+## Installation
 
-\!\[feature X\]\(images/feature-x.png\)
+1. Open Visual Studio Code.
+2. Go to the Extensions view by clicking the square icon in the sidebar or pressing `Ctrl+Shift+X`.
+3. Search for `TODO Finder`.
+4. Click `Install`.
 
-> Tip: Many popular extensions utilize animations. This is an excellent way to show off your extension! We recommend short, focused animations that are easy to follow.
+## Usage
 
-## Requirements
+### Sidebar View
 
-If you have any requirements or dependencies, add a section describing those and how to install and configure them.
+- Open the TODOs view from the activity bar to see the list of files containing TODOs.
+- Click on a file to navigate to it.
 
-## Extension Settings
+### Status Bar
 
-Include if your extension adds any VS Code settings through the `contributes.configuration` extension point.
+- The status bar shows the total number of TODOs in the project.
+- It updates automatically when you save a file or switch active editors.
 
-For example:
+### Ignoring TODOs
 
-This extension contributes the following settings:
+- Add `//ignore-todo` on the line before a TODO to exclude it from the count.
 
-* `myExtension.enable`: Enable/disable this extension.
-* `myExtension.thing`: Set to `blah` to do something.
+## Configuration
 
-## Known Issues
+### Default Values
 
-Calling out known issues can help limit users opening duplicate issues against your extension.
+- **Tag**: `""` (empty string).
+- **Files to Include**: `**/*`
+- **Files to Exclude**: `**/node_modules/**`
 
-## Release Notes
+### Setting Custom Values
 
-Users appreciate release notes as you update your extension.
+You can configure the extension settings through the VSCode settings UI or by editing your `settings.json` file:
 
-### 1.0.0
+```json
+{
+  "todosfinder.tag": "BUG",
+  "todosfinder.filesToInclude": "**/*.js",
+  "todosfinder.filesToExclude": "**/node_modules/**"
+}
+```
 
-Initial release of ...
-
-### 1.0.1
-
-Fixed issue #.
-
-### 1.1.0
-
-Added features X, Y, and Z.
-
----
-
-## Following extension guidelines
-
-Ensure that you've read through the extensions guidelines and follow the best practices for creating your extension.
-
-* [Extension Guidelines](https://code.visualstudio.com/api/references/extension-guidelines)
-
-## Working with Markdown
-
-You can author your README using Visual Studio Code. Here are some useful editor keyboard shortcuts:
-
-* Split the editor (`Cmd+\` on macOS or `Ctrl+\` on Windows and Linux).
-* Toggle preview (`Shift+Cmd+V` on macOS or `Shift+Ctrl+V` on Windows and Linux).
-* Press `Ctrl+Space` (Windows, Linux, macOS) to see a list of Markdown snippets.
-
-## For more information
-
-* [Visual Studio Code's Markdown Support](http://code.visualstudio.com/docs/languages/markdown)
-* [Markdown Syntax Reference](https://help.github.com/articles/markdown-basics/)
-
-**Enjoy!**
+- **Tag**: Custom tag to search for TODOs. Example: `BUG`.
+  - By default the extension will search for the keyword **TODO**. If you add a custom value, for example **BUG**, the extension will search for **TODO[BUG]**.
+- **Files to Include**: Global pattern of files to include in the search. Example: `**/*.js`
+- **Files to Exclude**: Global pattern of files to exclude from the search. Example: `**/node_modules/**`
