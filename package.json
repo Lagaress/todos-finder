@@ -51,18 +51,22 @@
       },
       {
         "command": "todoView.refresh",
-        "title": "Refresh TODOs",
-        "icon": "resources/icon.png"
+        "title": "Refresh TODOs"
       },
       {
         "command": "todosfinder.ignoreTodo",
         "title": "Ignore TODO"
+      },
+      {
+        "command": "todosfinder.configureTag",
+        "title": "Configure Tag",
+        "icon": "resources/icon.png"
       }
     ],
     "menus": {
       "view/title": [
         {
-          "command": "todoView.refresh",
+          "command": "todosfinder.configureTag",
           "when": "view == todoTreeView",
           "group": "navigation"
         }
