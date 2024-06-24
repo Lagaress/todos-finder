@@ -4,6 +4,7 @@ type TodosFinderConfig = {
   FILES_TO_INCLUDE_IN_SEARCH: string;
   FILES_TO_EXCLUDE_FROM_SEARCH: string;
   STATUS_BAR_ELEMENT_PRIORITY: number;
+  DEFAULT_TAG_VALUE: string;
 }
 
 const config: TodosFinderConfig = {
@@ -12,6 +13,7 @@ const config: TodosFinderConfig = {
   FILES_TO_INCLUDE_IN_SEARCH:  "**/*",
   FILES_TO_EXCLUDE_FROM_SEARCH: "**/node_modules/**",
   STATUS_BAR_ELEMENT_PRIORITY: 1,
+  DEFAULT_TAG_VALUE: '',
 }
 
 export default config;
