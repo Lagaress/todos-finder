@@ -50,6 +50,21 @@ async function getTodoCountDataByUri(uri: vscode.Uri): Promise<TodoCountData | n
   return null;
 }
 
+async function getFilesUris(): Promise<vscode.Uri[]> {
+  console.log("getFilesUris: Getting files uris.");
+  const vsCodeConfig = vscode.workspace.getConfiguration('todosfinder');
+  const filesToInclude = vsCodeConfig.get<string>('filesToInclude', config.DEFAULT_VALUES.FILES_TO_INCLUDE);
+  const filesToExclude = vsCodeConfig.get<string>('filesToExclude', config.DEFAULT_VALUES.FILES_TO_EXCLUDE);
+
+  if (vscode.window.activeTextEditor) {
+    const filesUris = [vscode.window.activeTextEditor.document.uri];
+    console.log(`getFilesUris: Active text editor URI retrieved successfully`);
+    return filesUris;
+  } else {
+    const filesUris = await vscode.workspace.findFiles(filesToInclude, filesToExclude);
+    console.log(`getFilesUris: Retrieved ${filesUris.length} files uris successfully.`);
+    return filesUris;
+  }}
 
 export default {
   async updateTodoCount(): Promise<void> {
@@ -62,13 +77,7 @@ export default {
       return;
     }
 
-    console.log("updateTodoCount: Getting file uris to find TODOs.")
-    const filesUris = vscode.window.activeTextEditor
-      ? [vscode.window.activeTextEditor.document.uri]
-      : await vscode.workspace.findFiles(
-          config.FILES_TO_INCLUDE_IN_SEARCH,
-          config.FILES_TO_EXCLUDE_FROM_SEARCH
-        );
+    const filesUris = await getFilesUris();
     
     console.log(`updateTodoCount: Processing ${filesUris.length} files to find TODOs.`);
     const todosData = await Promise.all(filesUris.map(uri => getTodoCountDataByUri(uri)));

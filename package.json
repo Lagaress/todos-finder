@@ -23,6 +23,16 @@
           "type": "string",
           "default": "",
           "description": "Tag to search for in your code"
+        },
+        "todosfinder.filesToInclude": {
+          "type": "string",
+          "default": "**/*",
+          "description": "Global pattern of files to include in the search"
+        },
+        "todosfinder.filesToExclude": {
+          "type": "string",
+          "default": "**/node_modules/**",
+          "description": "Global pattern of files to exclude from the search"
         }
       }
     },
