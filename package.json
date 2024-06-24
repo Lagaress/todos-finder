@@ -3,6 +3,7 @@
   "displayName": "TODOs Finder",
   "description": "An extension that helps you find and manage TODOs in your codebase",
   "version": "0.0.1",
+  "icon": "resources/mainIcon.png",
   "engines": {
     "vscode": "^1.90.0"
   },
@@ -48,7 +49,7 @@
         {
           "id": "todoView",
           "title": "TODOs",
-          "icon": "resources/icon.png"
+          "icon": "resources/lateral.png"
         }
       ]
     },
@@ -77,7 +78,7 @@
       {
         "command": "todosfinder.configureTag",
         "title": "Configure Tag",
-        "icon": "resources/icon.png"
+        "icon": "$(tag-add)"
       }
     ],
     "menus": {
