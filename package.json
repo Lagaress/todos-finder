@@ -65,14 +65,6 @@
     },
     "commands": [
       {
-        "command": "todosfinder.helloWorld",
-        "title": "Hello World"
-      },
-      {
-        "command": "todoView.refresh",
-        "title": "Refresh TODOs"
-      },
-      {
         "command": "todosfinder.ignoreTodo",
         "title": "Ignore TODO"
       },

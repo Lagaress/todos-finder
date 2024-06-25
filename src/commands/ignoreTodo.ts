@@ -1,7 +1,5 @@
 import * as vscode from "vscode";
-import todoService from "../services/todoService";
 import config from "../config/config";
-import { StatusBarSingleton } from "../types/Singleton/StatusBarSingleton";
 
 async function ignoreTodoCommand() {
   console.log("ignoreTodoCommand: Command execution started.");
@@ -21,9 +19,6 @@ async function ignoreTodoCommand() {
       const insertPosition = new vscode.Position(currentLine.lineNumber, 0);
       editBuilder.insert(insertPosition, `${ignoreTodoComment}\n`);
     });
-
-    console.log(`ignoreTodoCommand: ${ignoreTodoComment} inserted successfully, updating TODO count.`);
-    await todoService.updateTodoCount();
 
     console.log("ignoreTodoCommand: Command execution finished.");
   } catch (error) {

@@ -7,7 +7,7 @@ export class TodoProviderSingleton {
 
   public static getInstance(): TodoProvider {
     if (!TodoProviderSingleton.instance) {
-      console.log("Creating TodoProvider.");
+      console.log("TodoProviderSingleton: Creating TodoProvider.");
       TodoProviderSingleton.instance = new TodoProvider();
     }
     return TodoProviderSingleton.instance;
